@@ -1,0 +1,33 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Documentation
+consumes:
+  - "application/json" # may need to change this
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /daily:
+    get:
+      operationId: "dailyInfo.read" # which module to call
+      tags:
+        - "DailyInfo"
+      summary: "The daily info data structure supported by the server application"
+      description: "Read the list of daily info data"
+      responses:
+        200:
+          description: "Successful read daily info list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                startDate:
+                  type: "string"
+                endDate:
+                  type: "string"
+        
