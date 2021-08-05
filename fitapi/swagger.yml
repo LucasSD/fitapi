@@ -37,6 +37,9 @@ paths:
             type: array
             items:
               properties:
+                daily_id:
+                  type: string
+                  description: Id of the date entry
                 startDate:
                   type: string
                 endDate:
@@ -64,6 +67,15 @@ paths:
       responses:
         201:
           description: Successfully created daily entry in list
+          schema:
+              properties:
+                daily_id:
+                  type: string
+                  description: Id of the date entry
+                startDate:
+                  type: string
+                endDate:
+                  type: string
 
   /daily/{startDate}:
     get:
@@ -82,7 +94,11 @@ paths:
         200:
           description: Successfully read daily entry from daily info list
           schema:
+            type: object
             properties:
+              daily_id:
+                type: string
+                description: Id of the date entry
               startDate:
                 type: string
               endDate:
@@ -112,6 +128,16 @@ paths:
       responses:
         200:
           description: Successfully updated daily entry in daily info list
+          schema:
+              properties:
+                daily_id:
+                  type: string
+                  description: Id of the date entry
+                startDate:
+                  type: string
+                endDate:
+                  type: string
+
 
     delete:
       operationId: dailyInfo.delete
