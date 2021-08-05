@@ -108,7 +108,7 @@ ns.view = (function() {
             // did we get a dailyInfo array?
             if (dailyInfo) {
                 for (let i=0, l=dailyInfo.length; i < l; i++) {
-                    rows += `<tr><td class="endDate">${dailyInfo[i].endDate}</td><td class="startDate">${dailyInfo[i].startDate}</td><td>${dailyInfo[i].timestamp}</td></tr>`;
+                    rows += `<tr><td class="endDate">${dailyInfo[i].endDate}</td><td class="startDate">${dailyInfo[i].startDate}</td></tr>`;
                 }
                 $('table > tbody').append(rows);
             }
