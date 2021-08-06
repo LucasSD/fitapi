@@ -60,8 +60,9 @@ def create(day):
     :return:        201 on success, 406 if day exists already
     """
     startDate = day.get("startDate")
-    d, m ,y = (int(x) for x in startDate.split("-"))
-    query_date = datetime(y, m, d)
+    d, m ,y = (x for x in startDate.split("-"))
+    d = d[0:2].lstrip("0")
+    query_date = datetime(int(y), int(m), int(d))
 
     existing_day = Daily.query \
         .filter(Daily.startDate == query_date) \
