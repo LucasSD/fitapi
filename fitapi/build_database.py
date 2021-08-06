@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from config import db
-from models import Daily
+from fitapi.config import db
+from fitapi.models import Daily
 
 # Data to initialize database with
 DAILYINFO = [

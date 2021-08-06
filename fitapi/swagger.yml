@@ -14,7 +14,7 @@ basePath: "/api"
 paths:
   /daily:
     get:
-      operationId: dailyInfo.read_all # which module to call
+      operationId: fitapi.dailyInfo.read_all # which module to call
       tags:
         - DailyInfo
       summary: Read the entire list of daily info for user
@@ -45,7 +45,7 @@ paths:
                 endDate:
                   type: string
     post:
-      operationId: dailyInfo.create
+      operationId: fitapi.dailyInfo.create
       tags:
         - DailyInfo
       summary: Create a daily entry and add it to the daily info list
@@ -79,7 +79,7 @@ paths:
 
   /daily/{startDate}:
     get:
-      operationId: dailyInfo.read_one
+      operationId: fitapi.dailyInfo.read_one
       tags:
         - DailyInfo
       summary: Read one date from the daily info list
@@ -105,7 +105,7 @@ paths:
                 type: string
 
     put:
-      operationId: dailyInfo.update
+      operationId: fitapi.dailyInfo.update
       tags:
         - DailyInfo
       summary: Update/modify a daily entry in the daily info list
@@ -140,7 +140,7 @@ paths:
 
 
     delete:
-      operationId: dailyInfo.delete
+      operationId: fitapi.dailyInfo.delete
       tags:
         - DailyInfo
       summary: Delete an entry from the daily info list

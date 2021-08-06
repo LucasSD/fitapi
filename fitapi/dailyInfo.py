@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import abort, make_response
 
-from config import db
-from models import Daily, DailySchema
+from fitapi.config import db
+from fitapi.models import Daily, DailySchema
 
 # Create a handler for our read (GET) daily info
 def read_all():
@@ -20,7 +20,7 @@ def read_all():
 
     # Serialize the data for the response
     daily_schema = DailySchema(many=True)
-    return daily_schema.dump(daily).data
+    return daily_schema.dump(daily)
 
 def read_one(startDate):
     """
@@ -41,7 +41,7 @@ def read_one(startDate):
         
         # Serialize the data for the response
         day_schema = DailySchema()
-        return day_schema.dump(day).data
+        return day_schema.dump(day)
 
     # if not found
     else:
@@ -69,14 +69,14 @@ def create(day):
 
         # Create a daily instance using the schema and the passed-in day
         schema = DailySchema()
-        new_day = schema.load(day, session=db.session).data
+        new_day = schema.load(day, session=db.session)
 
         # Add the day to the database
         db.session.add(new_day)
         db.session.commit()
 
         # Serialize and return the newly created day in the response
-        return schema.dump(new_day).data, 201
+        return schema.dump(new_day), 201
 
     # Otherwise, nope, day exists already
     else:
