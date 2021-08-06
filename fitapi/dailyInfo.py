@@ -31,11 +31,11 @@ def read_one(startDate):
     """
 
     d, m ,y = (int(x) for x in startDate.split("-"))
-    query_obj = datetime(y, m, d)
+    query_date = datetime(y, m, d)
 
     # Get the date requested
     day = Daily.query \
-        .filter(Daily.startDate == query_obj) \
+        .filter(Daily.startDate == query_date) \
         .one_or_none()
 
 
@@ -60,15 +60,16 @@ def create(day):
     :return:        201 on success, 406 if day exists already
     """
     startDate = day.get("startDate")
-    endDate = day.get("endDate")
+    d, m ,y = (int(x) for x in startDate.split("-"))
+    query_date = datetime(y, m, d)
 
     existing_day = Daily.query \
-        .filter(Daily.endDate == endDate) \
-        .filter(Daily.startDate == startDate) \
+        .filter(Daily.startDate == query_date) \
         .one_or_none()
 
     # Can we insert this day?
     if existing_day is None:
+        day["startDate"] = query_date
 
         # Create a daily instance using the schema and the passed-in day
         schema = DailySchema()
@@ -153,8 +154,12 @@ def delete(startDate):
     :param startDate:   startDate of the day to delete
     :return:            200 on successful delete, 404 if not found
     """
+
+    d, m ,y = (int(x) for x in startDate.split("-"))
+    query_date = datetime(y, m, d)
+
     # Get the day requested
-    day = Daily.query.filter(Daily.startDate == startDate).one_or_none()
+    day = Daily.query.filter(Daily.startDate == query_date).one_or_none()
 
     # Day exists?
     if day is not None:
