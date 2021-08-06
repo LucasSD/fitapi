@@ -24,17 +24,14 @@ ns.model = (function() {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
-        create: function(endDate, startDate) {
+        create: function(day) { // day might need to be daily
             let ajax_options = {
                 type: 'POST',
                 url: 'api/daily',
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify({
-                    'endDate': endDate,
-                    'startDate': startDate
-                })
+                data: JSON.stringify(day) // day might need to be daily
             };
             $.ajax(ajax_options)
             .done(function(data) {
@@ -44,17 +41,14 @@ ns.model = (function() {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
-        update: function(endDate, startDate) {
+        update: function(day) {
             let ajax_options = {
                 type: 'PUT',
                 url: 'api/daily/' + startDate,
                 accepts: 'application/json',
                 contentType: 'application/json',
                 dataType: 'json',
-                data: JSON.stringify({
-                    'endDate': endDate,
-                    'startDate': startDate
-                })
+                data: JSON.stringify(day)
             };
             $.ajax(ajax_options)
             .done(function(data) {
@@ -67,7 +61,7 @@ ns.model = (function() {
         'delete': function(startDate) {
             let ajax_options = {
                 type: 'DELETE',
-                url: 'api/daily/' + startDate,
+                url: `api/daily/${startDate}`,
                 accepts: 'application/json',
                 contentType: 'plain/text'
             };
@@ -86,16 +80,19 @@ ns.model = (function() {
 ns.view = (function() {
     'use strict';
 
-    let $endDate = $('#endDate'),
+    let $day_id = $('#day_id'),
+        $endDate = $('#endDate'),
         $startDate = $('#startDate');
 
     // return the API
     return {
         reset: function() {
+            $day_id.val('');
             $startDate.val('');
             $endDate.val('').focus();
         },
-        update_editor: function(endDate, startDate) {
+        update_editor: function(day) {
+            $day_id.val(day.day_id);
             $startDate.val(startDate);
             $endDate.val(endDate).focus();
         },
@@ -105,10 +102,13 @@ ns.view = (function() {
             // clear the table
             $('.dailyInfo table > tbody').empty();
 
-            // did we get a dailyInfo array?
+            // did we get a dailyInfo array? Might need to changeb elow as my primary key is different
             if (dailyInfo) {
                 for (let i=0, l=dailyInfo.length; i < l; i++) {
-                    rows += `<tr><td class="endDate">${dailyInfo[i].endDate}</td><td class="startDate">${dailyInfo[i].startDate}</td></tr>`;
+                    rows += `<tr data-day-id="${dailyInfo[i].day_id}">
+                    <td class="endDate">${dailyInfo[i].endDate}</td>
+                    <td class="startDate">${dailyInfo[i].startDate}</td>
+                    </tr>`;
                 }
                 $('table > tbody').append(rows);
             }
@@ -131,6 +131,7 @@ ns.controller = (function(m, v) {
     let model = m,
         view = v,
         $event_pump = $('body'),
+        $day_id = $('#day_id'),
         $endDate = $('#endDate'),
         $startDate = $('#startDate');
 
@@ -152,20 +153,28 @@ ns.controller = (function(m, v) {
         e.preventDefault();
 
         if (validate(endDate, startDate)) {
-            model.create(endDate, startDate)
+            model.create({
+                'endDate': endDate, 
+                'startDate': startDate,
+            })
         } else {
             alert('Problem with startDate or endDate input');
         }
     });
 
     $('#update').click(function(e) {
-        let endDate = $endDate.val(),
+        let day_id = $day_id.val(),
+            endDate = $endDate.val(),
             startDate = $startDate.val();
 
         e.preventDefault();
 
         if (validate(endDate, startDate)) {
-            model.update(endDate, startDate)
+            model.update({
+                day_id: person_id,
+                endDate: endDate, 
+                startDate: startDate,
+            })
         } else {
             alert('Problem with startDate or endDate input');
         }
@@ -191,8 +200,13 @@ ns.controller = (function(m, v) {
 
     $('table > tbody').on('dblclick', 'tr', function(e) {
         let $target = $(e.target),
+            day_id,
             endDate,
             startDate;
+
+        day_id = $target
+            .parent()
+            .attr('data-day-id'); // might need ot change this to startDate (PK)
 
         endDate = $target
             .parent()
@@ -204,7 +218,11 @@ ns.controller = (function(m, v) {
             .find('td.startDate')
             .text();
 
-        view.update_editor(endDate, startDate);
+        view.update_editor({
+            day_id: day_id,
+            fname: fname,
+            lname: lname,
+        });
     });
 
     // Handle the model events

@@ -30,9 +30,12 @@ def read_one(startDate):
     :return:        daily event matching startDate
     """
 
+    d, m ,y = (int(x) for x in startDate.split("-"))
+    query_obj = datetime(y, m, d)
+
     # Get the date requested
     day = Daily.query \
-        .filter(Daily.startDate == startDate) \
+        .filter(Daily.startDate == query_obj) \
         .one_or_none()
 
 
