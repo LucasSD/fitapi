@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import abort, make_response
 
-from fitapi.config import db
+from fitapi import db
 from fitapi.models import Daily, DailySchema
 
 # Create a handler for our read (GET) daily info

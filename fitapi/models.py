@@ -1,5 +1,5 @@
 from datetime import datetime
-from fitapi.config import db, ma
+from fitapi import db, ma
 
 class Daily(db.Model):
     __tablename__ = 'daily'
