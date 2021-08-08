@@ -15,6 +15,11 @@ def test_daily_model(new_daily):
     assert str(new_daily.startDate) == '1984-01-01 00:00:00'
     assert str(new_daily.endDate) == '1984-01-02 00:00:00'
 
+def test_user_model(new_user):
+    assert str(new_user.fname) == 'Tony'
+    assert str(new_user.lname) == 'Stark'
+    assert str(new_user.userId) == 1
+
 def test_get_all_daily_and_ordering(test_client):
     url = "/api/daily"
 
