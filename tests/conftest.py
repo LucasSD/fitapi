@@ -26,8 +26,8 @@ def test_client():
         # Insert Daily data
         day1 = Daily(startDate=datetime(1984, 1, 1), endDate=datetime(1984, 1, 2))
         day2 = Daily(startDate=datetime(1985, 1, 1), endDate=datetime(1985, 1, 2))
-        db.session.add(day1)
         db.session.add(day2)
+        db.session.add(day1)
  
         # Commit the changes to db
         db.session.commit()
