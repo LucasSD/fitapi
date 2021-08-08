@@ -14,13 +14,12 @@ def read_all():
     :return:        json string of list of daily info
     """
     # Create the list of daily info from our data
-    daily = Daily.query \
-        .order_by(Daily.startDate) \
-        .all()
+    daily = Daily.query.order_by(Daily.startDate).all()
 
     # Serialize the data for the response
     daily_schema = DailySchema(many=True)
     return daily_schema.dump(daily)
+
 
 def read_one(startDate):
     """
@@ -30,27 +29,23 @@ def read_one(startDate):
     :return:        daily event matching startDate
     """
 
-    d, m ,y = (int(x) for x in startDate.split("-"))
+    d, m, y = (int(x) for x in startDate.split("-"))
     query_date = datetime(y, m, d)
 
     # Get the date requested
-    day = Daily.query \
-        .filter(Daily.startDate == query_date) \
-        .one_or_none()
-
+    day = Daily.query.filter(Daily.startDate == query_date).one_or_none()
 
     # Does the date exist in daily info?
     if day is not None:
-        
+
         # Serialize the data for the response
         day_schema = DailySchema()
         return day_schema.dump(day)
 
     # if not found
     else:
-        abort(
-            404, "Date {startDate} not found".format(startDate=startDate)
-        )
+        abort(404, "Date {startDate} not found".format(startDate=startDate))
+
 
 def create(day):
     """
@@ -60,13 +55,11 @@ def create(day):
     :return:        201 on success, 406 if day exists already
     """
     startDate = day.get("startDate")
-    d, m ,y = (x for x in startDate.split("-"))
+    d, m, y = (x for x in startDate.split("-"))
     d = d[0:2].lstrip("0")
     query_date = datetime(int(y), int(m), int(d))
 
-    existing_day = Daily.query \
-        .filter(Daily.startDate == query_date) \
-        .one_or_none()
+    existing_day = Daily.query.filter(Daily.startDate == query_date).one_or_none()
 
     # Can we insert this day?
     if existing_day is None:
@@ -85,7 +78,7 @@ def create(day):
 
     # Otherwise, nope, day exists already
     else:
-        abort(409, f'Date {startDate} exists already')
+        abort(409, f"Date {startDate} exists already")
 
 
 def update(startDate, day):
@@ -98,9 +91,7 @@ def update(startDate, day):
     :return:            updated day structure
     """
     # Get the day requested from the db into session
-    update_day = Daily.query.filter(
-        Daily.startDate == startDate
-    ).one_or_none()
+    update_day = Daily.query.filter(Daily.startDate == startDate).one_or_none()
 
     # Try to find an existing day with the same date as the update
     endDate = day.get("endDate")
@@ -120,9 +111,7 @@ def update(startDate, day):
         )
 
     # Date already exists
-    elif (
-        existing_day is not None and existing_day.startDate != startDate
-    ):
+    elif existing_day is not None and existing_day.startDate != startDate:
         abort(
             409,
             "Entry {endDate} {startDate} exists already".format(
@@ -156,7 +145,7 @@ def delete(startDate):
     :return:            200 on successful delete, 404 if not found
     """
 
-    d, m ,y = (int(x) for x in startDate.split("-"))
+    d, m, y = (int(x) for x in startDate.split("-"))
     query_date = datetime(y, m, d)
 
     # Get the day requested
