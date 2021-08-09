@@ -93,7 +93,7 @@ paths:
     get:
       operationId: fitapi.dates.read_all
       tags:
-        - Dates
+        - DailyInfo
       summary: Read the entire set of dates for all users
       description: Read the entire set of dates for all users
       responses:
@@ -137,7 +137,7 @@ paths:
           required: True
         - name: startDate
           in: path
-          description: start date
+          description: IMPORTANT :-  start date must be dd-mm-yyyy format
           type: string
           required: True
       responses:
@@ -148,7 +148,7 @@ paths:
             properties:
               startDate:
                 type: string
-                description: start date
+                description: IMPORTANT :-  start date must be dd-mm-yyyy format
               user_id:
                 type: integer
                 description: Id of the user note associated with

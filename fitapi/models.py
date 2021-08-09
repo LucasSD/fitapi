@@ -27,9 +27,6 @@ class Daily(db.Model):
 
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
-    def __init__(self, **kwargs):
-        super().__init__(strict=True, **kwargs)
-
     class Meta:
         model = User
         sqla_session = db.session
@@ -41,18 +38,12 @@ class UserDailySchema(ma.SQLAlchemyAutoSchema):
     """
     This class exists to get around a recursion issue
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(strict=True, **kwargs)
-
     user_id = fields.Int()
     startDate = fields.Str()
     endDate = fields.Str()
 
 
 class DailySchema(ma.SQLAlchemyAutoSchema):
-    def __init__(self, **kwargs):
-        super().__init__(strict=True, **kwargs)
 
     class Meta:
         model = Daily
@@ -65,9 +56,6 @@ class DailyUserSchema(ma.SQLAlchemyAutoSchema):
     """
     This class exists to get around a recursion issue
     """
-
-    def __init__(self, **kwargs):
-        super().__init__(strict=True, **kwargs)
 
     user_id = fields.Int()
     lname = fields.Str()

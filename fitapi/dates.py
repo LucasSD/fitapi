@@ -1,6 +1,10 @@
-from flask import make_response, abort
+from datetime import datetime
+
+from flask import abort, make_response
+
 from fitapi import db
-from fitapi.models import User, Daily, DailySchema
+from fitapi.models import Daily, DailySchema, User
+
 
 def read_all():
     """
@@ -11,7 +15,7 @@ def read_all():
     dates = Daily.query.order_by(db.desc(Daily.startDate)).all()
 
     # Serialize the list of notes from our data
-    date_schema = DailySchema(many=True, exclude=["user.dates"])
+    date_schema = DailySchema(many=True) # can exclude fields here if desired
     data = date_schema.dump(dates)
     return data
 
@@ -24,18 +28,22 @@ def read_one(user_id, startDate):
     :param startDate:     startDate
     :return:                json string of date contents
     """
+
+    d, m, y = (int(x) for x in startDate.split("-"))
+    query_date = datetime(y, m, d)
+
     # Query the database for the date
     date = (
         Daily.query.join(User, User.user_id == Daily.user_id)
         .filter(User.user_id == user_id)
-        .filter(Daily.startDate == startDate)
+        .filter(Daily.startDate == query_date)
         .one_or_none()
     )
 
     # Date exists
     if date is not None:
-        note_schema = DailySchema()
-        data = note_schema.dump(date)
+        date_schema = DailySchema()
+        data = date_schema.dump(date)
         return data
 
     # Date does not exist
