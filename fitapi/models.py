@@ -1,4 +1,7 @@
 from datetime import datetime
+
+from marshmallow import fields
+
 from fitapi import db, ma
 
 
@@ -23,7 +26,50 @@ class Daily(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
 
 
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    def __init__(self, **kwargs):
+        super().__init__(strict=True, **kwargs)
+
+    class Meta:
+        model = User
+        sqla_session = db.session
+
+    dates = fields.Nested("UserDailySchema", default=[], many=True)
+
+
+class UserDailySchema(ma.SQLAlchemyAutoSchema):
+    """
+    This class exists to get around a recursion issue
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(strict=True, **kwargs)
+
+    user_id = fields.Int()
+    startDate = fields.Str()
+    endDate = fields.Str()
+
+
 class DailySchema(ma.SQLAlchemyAutoSchema):
+    def __init__(self, **kwargs):
+        super().__init__(strict=True, **kwargs)
+
     class Meta:
         model = Daily
         sqla_session = db.session
+
+    user = fields.Nested("DailyUserSchema", default=None)
+
+
+class DailyUserSchema(ma.SQLAlchemyAutoSchema):
+    """
+    This class exists to get around a recursion issue
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(strict=True, **kwargs)
+
+    user_id = fields.Int()
+    lname = fields.Str()
+    fname = fields.Str()
+    
