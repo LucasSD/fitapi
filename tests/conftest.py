@@ -57,4 +57,6 @@ def new_daily():
 @pytest.fixture(scope="module")
 def new_user():
     user = User(fname="Tony", lname="Stark")
+    day = Daily(startDate=datetime(1984, 1, 1), endDate=datetime(1984, 1, 2))
+    user.dates = [day]
     return user
