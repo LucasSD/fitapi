@@ -2,154 +2,157 @@ swagger: "2.0"
 info:
   description: This is the swagger file that goes with our server code
   version: "1.0.0"
-  title: Swagger REST Documentation
+  title: Swagger Rest API
 consumes:
-  - "application/json" # may need to change this
+  - application/json
 produces:
-  - "application/json"
+  - application/json
 
-basePath: "/api"
+basePath: /api
 
 # Paths supported by the server application
 paths:
   /daily:
     get:
-      operationId: fitapi.dailyInfo.read_all # which module to call
+      operationId: fitapi.dailyInfo.read_all
       tags:
         - DailyInfo
       summary: Read the entire list of daily info for user
-      description: Read the list of daily info
-      parameters:
-        - name: length
-          in: query
-          type: integer
-          description: Number of daily entries to get from dailyInfo
-          required: false
-        - name: offset
-          in: query
-          type: integer
-          description: Offset from beginning of list where to start gathering daily info
-          required: false
+      description: Read the entire list of daily info for user
       responses:
         200:
-          description: Successfully read daily info list operation
+          description: Successfully read user set operation
           schema:
             type: array
             items:
               properties:
-                daily_id:
+                user_id:
+                  type: integer
+                  description: Id of the user
+                fname:
                   type: string
-                  description: Id of the date entry
-                startDate:
+                  description: First name of the person
+                lname:
                   type: string
-                endDate:
-                  type: string
-    post:
-      operationId: fitapi.dailyInfo.create
-      tags:
-        - DailyInfo
-      summary: Create a daily entry and add it to the daily info list
-      description: Create a new daily entry in the daily info list
-      parameters:
-        - name: day
-          in: body
-          description: Daily entry to create
-          required: True
-          schema:
-            type: object
-            properties:
-              startDate:
-                type: string
-                description: start date
-              endDate:
-                type: string
-                description: end date
-      responses:
-        201:
-          description: Successfully created daily entry in list
-          schema:
-              properties:
-                daily_id:
-                  type: string
-                  description: Id of the date entry
-                startDate:
-                  type: string
-                endDate:
-                  type: string
-
-  /daily/{startDate}:
+                  description: Last name of the person
+                dates:
+                  type: array
+                  items:
+                    properties:
+                      user_id:
+                        type: integer
+                        description: Id of user this day is associated with
+                      startDate:
+                        type: string
+                      endDate:
+                        type: string
+      
+  /daily/{user_id}:
     get:
       operationId: fitapi.dailyInfo.read_one
       tags:
         - DailyInfo
-      summary: Read one date from the daily info list
-      description: Read one date from the daily info list
+      summary: Read one user
+      description: Read one user
       parameters:
-        - name: startDate
+        - name: user_id
           in: path
-          description: Date to get from the list
-          type: string
+          description: Id of the user to get
+          type: integer
           required: True
       responses:
         200:
-          description: Successfully read daily entry from daily info list
+          description: Successfully read user from User data operation
           schema:
             type: object
             properties:
-              daily_id:
+              user_id:
                 type: string
-                description: Id of the date entry
-              startDate:
+                description: Id of the user
+              fname:
                 type: string
-              endDate:
+                description: First name of the user
+              lname:
                 type: string
+                description: Last name of the user
+              notes:
+                type: array
+                items:
+                  properties:
+                    user_id:
+                      type: integer
+                      description: Id of person this note is associated with
+                    startDate:
+                      type: string
+                      description: start date
+                    endDate:
+                      type: string
+                      description: end date
 
-    put:
-      operationId: fitapi.dailyInfo.update
+  /dates:
+    get:
+      operationId: fitapi.dates.read_all
       tags:
         - DailyInfo
-      summary: Update/modify a daily entry in the daily info list
-      description: Update/modify a daily entry in the daily info list
-      parameters:
-        - name: startDate
-          in: path
-          description: The date to be updated
-          type: string
-          required: True
-        - name: day
-          in: body
-          schema:
-            type: object
-            properties:
-              endDate:
-                type: string
-              startDate:
-                type: string
+      summary: Read the entire set of dates for all users
+      description: Read the entire set of dates for all users
       responses:
         200:
-          description: Successfully updated daily entry in daily info list
+          description: Successfully read dates for all users operation
           schema:
+            type: array
+            items:
               properties:
-                daily_id:
-                  type: string
-                  description: Id of the date entry
                 startDate:
                   type: string
+                  description: start date
                 endDate:
                   type: string
+                  description: end date
+                user:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      description: Id of associated user
+                    fname:
+                      type: string
+                      description: Frist name of associated user
+                    lname:
+                      type: string
+                      description: Last name of associated user
 
-
-    delete:
-      operationId: fitapi.dailyInfo.delete
+  /daily/{user_id}/date/{startDate}:
+    get:
+      operationId: fitapi.dates.read_one
       tags:
         - DailyInfo
-      summary: Delete an entry from the daily info list
-      description: Delete an entry from the daily info list
+      summary: Read a particular date associated with a user
+      description: Read a particular date associated with a user
       parameters:
+        - name: user_id
+          in: path
+          description: Id of user associated with date
+          type: integer
+          required: True
         - name: startDate
           in: path
+          description: IMPORTANT :-  start date must be dd-mm-yyyy format
           type: string
           required: True
       responses:
         200:
-          description: Successfully deleted an entry from the daily info list   
+          description: Successfully read date for a user
+          schema:
+            type: object
+            properties:
+              startDate:
+                type: string
+                description: IMPORTANT :-  start date must be dd-mm-yyyy format
+              user_id:
+                type: integer
+                description: Id of the user note associated with
+              endDate:
+                type: string
+                description: end date
+     
