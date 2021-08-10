@@ -32,7 +32,7 @@ Please follow the instructions below to run this application.
 ## Start the development server:
 ```python server.py```
 
-After these commands, you should be able to see the Swagger UI at http://localhost:5000/api/ui. All URL endpoints stated in the UI are functional. An unfinished Single Page application is visible at http://localhost:5000.
+After these commands, you should be able to see the Swagger UI at http://localhost:5000/api/ui. All URL endpoints stated in the UI are functional. An unfinished Single Page Application is visible at http://localhost:5000.
 
 ## Project Status
 
