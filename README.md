@@ -1,3 +1,4 @@
+![](swagger-cover.png)
 # Introduction
 
 The aim of this project is to create a simple API using Flask and Connexion. Only GET methods have been implemented. 
