@@ -30,10 +30,9 @@ Please follow the instructions below to run this application.
 ```cvrg.bat```
 
 ## Start the development server:
-## https://docs.djangoproject.com/en/3.2/ref/django-admin/#django-admin-runserver
 ```python server.py```
 
-After these commands, you should be able to see the Swagger UI at http://localhost:8000/api/ui. All URL endpoints stated in the UI are functional. An unfinished Single Page application is visible at http://localhost:8000.
+After these commands, you should be able to see the Swagger UI at http://localhost:5000/api/ui. All URL endpoints stated in the UI are functional. An unfinished Single Page application is visible at http://localhost:5000.
 
 ## Project Status
 
