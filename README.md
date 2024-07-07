@@ -37,7 +37,7 @@ After these commands, you should be able to see the Swagger UI at http://localho
 
 ## Project Status
 
-Still being developed. 
+On hold. 
 ###### To do:
 
 - consider adding functionality for all HTTP verbs. 
